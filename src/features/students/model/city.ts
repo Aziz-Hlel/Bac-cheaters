@@ -1,0 +1,28 @@
+export const CityEnum = {
+  TUNIS: "TUNIS",
+  SOUSSE: "SOUSSE",
+  MONASTIR: "MONASTIR",
+  BIZERTE: "BIZERTE",
+  NABEUL: "NABEUL",
+  JENDOUBA: "JENDOUBA",
+  KASSERINE: "KASSERINE",
+  KAIROUAN: "KAIROUAN",
+  KEF: "KEF",
+  MAHDIA: "MAHDIA",
+  SFAX: "SFAX",
+  GABES: "GABES",
+  GAFSA: "GAFSA",
+  MEDENINE: "MEDENINE",
+  TATAOUINE: "TATAOUINE",
+  TOZEUR: "TOZEUR",
+  KEBILI: "KEBILI",
+  BEJA: "BEJA",
+  ZAGHOUAN: "ZAGHOUAN",
+  SILIANA: "SILIANA",
+  MANOUBA: "MANOUBA",
+  BEN_AROUS: "BEN_AROUS",
+  ARIANA: "ARIANA"
+};
+
+export type CityEnum = typeof CityEnum[keyof typeof CityEnum];
+
