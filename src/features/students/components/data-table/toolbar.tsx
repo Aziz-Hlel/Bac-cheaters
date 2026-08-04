@@ -5,10 +5,11 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ChevronDownIcon, SearchIcon } from 'lucide-react'
+import { ChevronDownIcon, SearchIcon, Sheet } from 'lucide-react'
 import { useId } from 'react'
 import { useStudentsTable } from '../../provider/student-table-provider'
 import type { SearchKey } from '../../types/searchKey'
+import { useSetDialogOpen } from '../../store/useDialogStore'
 
 
 const searchKeys = [
@@ -32,6 +33,8 @@ const Toolbar = () => {
         table.getAllColumns().filter(column => column.getCanHide()).map(column => column.toggleVisibility(true))
     }
     const id = useId()
+
+    const setDialogState = useSetDialogOpen();
     return (
         <div className='flex justify-between gap-2 pb-4 max-sm:flex-col sm:items-center'>
             <div className='flex items-center space-x-2'>
@@ -69,11 +72,16 @@ const Toolbar = () => {
                 </div>
             </div>
             <div className='flex items-center gap-2'>
+
+                <Button onClick={() => setDialogState('upload')} className=" flex bg-green-600 hover:bg-green-600/80 "> <Sheet /> <span className="  "> تحميل التلامذة </span></Button>
+                
                 <DropdownMenu>
                     <DropdownMenuTrigger>
-                        <Button variant='outline' size='sm' className='ml-auto'>
-                            <ChevronDownIcon className='ml-2 size-4' />
-                            عرض الأعمدة
+                        <Button variant='outline' size='sm' className='mr-auto'>
+                            <span className='text-right'>
+                                عرض الأعمدة
+                            </span>
+                            <ChevronDownIcon className='mr-1 size-4 ' />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">

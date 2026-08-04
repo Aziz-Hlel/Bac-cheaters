@@ -110,7 +110,7 @@ const EditStudentDialogMain = ({ student }: { student: Student }) => {
 
     return (
         <Dialog open onOpenChange={handleCancel}>
-            <DialogContent className="max-w-2xl gap-0 p-0 overflow-hidden">
+            <DialogContent className="min-w-2xl gap-0 p-0 overflow-hidden">
                 <div className="relative overflow-hidden bg-linear-to-br from-violet-600 via-purple-600 to-indigo-700 px-6 py-5">
                     <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
                     <div className="pointer-events-none absolute -right-2 top-10 h-16 w-16 rounded-full bg-white/5" />
