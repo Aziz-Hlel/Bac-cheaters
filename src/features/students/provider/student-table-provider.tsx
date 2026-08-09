@@ -20,7 +20,7 @@ import {
     type PropsWithChildren
 } from 'react';
 import { columns } from '../components/data-table/columns-definition';
-import { studentsSeed } from '../data/students.seed';
+import { useStudents } from '../hooks/useStudents';
 import type { Student } from '../model/student';
 import type { SearchKey } from '../types/searchKey';
 
@@ -51,25 +51,25 @@ export function StudentsTableProvider({ children }: PropsWithChildren) {
     const [globalFilter, setGlobalFilter] = useState('');
     const [searchKey, setSearchKey] = useState<SearchKey>('name');
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
-
+    const { students } = useStudents();
     const nameFuse = useMemo(
         () =>
-            new Fuse(studentsSeed, {
+            new Fuse(students, {
                 keys: ['name'],
                 threshold: 0.3,
                 includeScore: true,
             }),
-        [],
+        [students],
     );
 
     const cinFuse = useMemo(
         () =>
-            new Fuse(studentsSeed, {
+            new Fuse(students, {
                 keys: ['cin'],
                 threshold: 0.3,
                 includeScore: true,
             }),
-        [],
+        [students],
     );
 
 
@@ -79,8 +79,8 @@ export function StudentsTableProvider({ children }: PropsWithChildren) {
             const fuse = searchKey === 'name' ? nameFuse : cinFuse;
             return fuse.search(globalFilter).map((item) => item.item);
         }
-        return studentsSeed
-    }, [cinFuse, globalFilter, nameFuse, searchKey])
+        return students
+    }, [cinFuse, globalFilter, nameFuse, searchKey, students])
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({

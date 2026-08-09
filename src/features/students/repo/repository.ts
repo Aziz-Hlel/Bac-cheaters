@@ -1,5 +1,5 @@
-import type { Student } from "@/features/students/model/student";
-import { readJson, writeJson } from "@/storage/json-storage";
+import type { Student } from '@/features/students/model/student';
+import { readJson, writeJson } from '@/storage/json-storage';
 
 async function getStudents() {
   const students = await readJson();
@@ -8,7 +8,7 @@ async function getStudents() {
 }
 
 export async function getAll() {
-  return getStudents();
+  return await getStudents();
 }
 
 export async function getById(id: string) {
@@ -17,7 +17,7 @@ export async function getById(id: string) {
   return students.find((student) => student.id === id);
 }
 
-export async function create(input: Omit<Student, "createdAt">) {
+export async function create(input: Omit<Student, 'createdAt'>) {
   const students = await getStudents();
 
   const student: Student = {
@@ -33,12 +33,28 @@ export async function create(input: Omit<Student, "createdAt">) {
   return student;
 }
 
+export async function createMany(input: Omit<Student, 'createdAt'>[]) {
+  const students = await getStudents();
+
+  const newStudents: Student[] = input.map((student) => ({
+    createdAt: new Date().toISOString(),
+    ...student,
+  }));
+
+  const updatedStudents = [...newStudents, ...students];
+  console.log('ousil l write json');
+  await writeJson(updatedStudents);
+  console.log('kaml mn write json');
+
+  return updatedStudents;
+}
+
 export async function update(id: string, data: Partial<Student>) {
   const students = await getStudents();
 
   const index = students.findIndex((s) => s.id === id);
 
-  if (index === -1) throw new Error("Student not found");
+  if (index === -1) throw new Error('Student not found');
 
   students[index] = {
     ...students[index],
@@ -59,4 +75,9 @@ export async function remove(id: string) {
   const filtered = students.filter((s) => s.id !== id);
 
   await writeJson(filtered);
+}
+
+
+export async function removeAll() {
+  await writeJson([]);
 }

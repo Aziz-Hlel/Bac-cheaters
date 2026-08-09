@@ -2,7 +2,7 @@
 
 
 
-import { DeleteStudentDialog, EditStudentDialog, UploadStudentsDialog } from '../dialogs'
+import { DeleteAllStudentsDialog, DeleteStudentDialog, EditStudentDialog, UploadStudentsDialog } from '../dialogs'
 import { StudentsTableProvider } from '../provider/student-table-provider'
 import DraggableColumnDataTableDemo from './data-table/data-table'
 
@@ -13,6 +13,7 @@ const DataTableLayout = () => {
             <EditStudentDialog />
             <DeleteStudentDialog />
             <UploadStudentsDialog />
+            <DeleteAllStudentsDialog />
         </StudentsTableProvider>
     )
 }

@@ -2,19 +2,19 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
-import { keysToExcelColumnsSchema, type KeysToExcelColumnsInput } from "../../schemas/keysToExcelColumns";
 import {
-    User as UserIcon,
-    IdCard as IdCardIcon,
-    Building2 as BuildingIcon,
-    GraduationCap as GraduationCapIcon,
-    Hash as HashIcon,
-    FileText as FileTextIcon,
-    School as SchoolIcon,
     AlertCircle as AlertCircleIcon,
     AlertTriangle as AlertTriangleIcon,
+    Building2 as BuildingIcon,
+    FileText as FileTextIcon,
+    GraduationCap as GraduationCapIcon,
+    Hash as HashIcon,
+    IdCard as IdCardIcon,
+    School as SchoolIcon,
+    User as UserIcon,
 } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { keysToExcelColumnsSchema, type KeysToExcelColumnsInput } from "../../schemas/keysToExcelColumns";
 
 interface MapColumnsProps {
     handleMapColumnsStep: (columns: KeysToExcelColumnsInput) => void;
@@ -24,15 +24,15 @@ const MapColumns = ({ handleMapColumnsStep }: MapColumnsProps) => {
     const form = useForm<KeysToExcelColumnsInput>({
         resolver: zodResolver(keysToExcelColumnsSchema),
         defaultValues: {
-            cin: "",
-            name: "",
-            delegation: "",
-            section: "",
-            registrationNumber: "",
-            registrationType: "",
-            originalInstitute: "",
-            punishmentReason: "",
-            violation: "",
+            cin: null,
+            name: "E",
+            delegation: "K",
+            section: "I",
+            registrationNumber: "F",
+            registrationType: "J",
+            originalInstitute: "H",
+            punishmentReason: "D",
+            violation: "C",
         }
     });
 

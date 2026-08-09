@@ -119,7 +119,7 @@ const DraggableTableHeader = ({ header }: { header: Header<Student, unknown> }) 
     return (
         <TableHead
             ref={setNodeRef}
-            className='before:bg-border relative h-10 border-t before:absolute before:inset-y-0 before:left-0 before:w-px first:before:bg-transparent'
+            className='before:bg-border bg-muted/50 relative h-10 border-t before:absolute before:inset-y-0 before:left-0 before:w-px first:before:bg-transparent'
             style={style}
             aria-sort={
                 header.column.getIsSorted() === 'asc'

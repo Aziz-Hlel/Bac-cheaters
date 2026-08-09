@@ -1,29 +1,46 @@
-import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
-import { appDataDir } from "@tauri-apps/api/path";
-import type { Student } from "@/features/students/model/student";
+import type { Student } from '@/features/students/model/student';
+import {
+  BaseDirectory,
+  mkdir,
+  readTextFile,
+  writeTextFile,
+} from '@tauri-apps/plugin-fs';
 
-async function getDbPath() {
-  const dir = await appDataDir();
+const FILE_NAME = 'students.json';
 
-  return `${dir}/students.json`;
+async function ensureStorage() {
+  await mkdir('', {
+    baseDir: BaseDirectory.AppData,
+    recursive: true,
+  });
 }
 
-export async function readJson(): Promise<Student[]> {
-  const path = await getDbPath();
-
+export async function readJson():Promise<Student[]> {
   try {
-    const content = await readTextFile(path);
+    const content = await readTextFile(FILE_NAME, {
+      baseDir: BaseDirectory.AppData,
+    });
 
     return JSON.parse(content);
-  } catch {
-    await writeTextFile(path, JSON.stringify([], null, 2));
+  } catch (err) {
+    console.error(err);
+
+    await ensureStorage();
+
+    await writeTextFile(
+      FILE_NAME,
+      JSON.stringify([], null, 2),
+      {
+        baseDir: BaseDirectory.AppData,
+      }
+    );
 
     return [];
   }
 }
 
 export async function writeJson(students: Student[]) {
-  const path = await getDbPath();
-
-  await writeTextFile(path, JSON.stringify(students, null, 2));
+  await writeTextFile(FILE_NAME, JSON.stringify(students, null, 2), {
+    baseDir: BaseDirectory.AppData,
+  });
 }

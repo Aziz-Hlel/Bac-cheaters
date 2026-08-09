@@ -5,11 +5,11 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ChevronDownIcon, SearchIcon, Sheet } from 'lucide-react'
+import { ChevronDownIcon, SearchIcon, Sheet, Trash2 } from 'lucide-react'
 import { useId } from 'react'
 import { useStudentsTable } from '../../provider/student-table-provider'
+import { useSetDialogState } from '../../store/useDialogStore'
 import type { SearchKey } from '../../types/searchKey'
-import { useSetDialogOpen } from '../../store/useDialogStore'
 
 
 const searchKeys = [
@@ -34,7 +34,7 @@ const Toolbar = () => {
     }
     const id = useId()
 
-    const setDialogState = useSetDialogOpen();
+    const setDialogState = useSetDialogState();
     return (
         <div className='flex justify-between gap-2 pb-4 max-sm:flex-col sm:items-center'>
             <div className='flex items-center space-x-2'>
@@ -73,8 +73,20 @@ const Toolbar = () => {
             </div>
             <div className='flex items-center gap-2'>
 
-                <Button onClick={() => setDialogState('upload')} className=" flex bg-green-600 hover:bg-green-600/80 "> <Sheet /> <span className="  "> تحميل التلامذة </span></Button>
-                
+                <Button
+                    onClick={() => setDialogState('delete-all')}
+                    className=" flex bg-red-600 hover:bg-red-600/80 "
+                >
+                    <Trash2 /> <span className="  "> حذف جميع التلامذة </span>
+                </Button>
+
+                <Button
+                    onClick={() => setDialogState('upload')}
+                    className=" flex bg-green-600 hover:bg-green-600/80 "
+                >
+                    <Sheet /> <span className="  "> تحميل التلامذة </span>
+                </Button>
+
                 <DropdownMenu>
                     <DropdownMenuTrigger>
                         <Button variant='outline' size='sm' className='mr-auto'>

@@ -3,5 +3,11 @@
   "identifier": "default",
   "description": "enables the default permissions",
   "windows": ["main"],
-  "permissions": ["core:default", "fs:allow-app-read", "fs:allow-app-write"]
+  "permissions": [
+    "core:default",
+    "fs:default",
+    "fs:create-app-specific-dirs",
+    "fs:allow-appdata-read",
+    "fs:allow-appdata-write"
+  ]
 }

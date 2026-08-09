@@ -34,7 +34,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useStudents } from "../hooks/useStudents";
 import type { UpdateStudentInput } from "../model/student";
 import { updateStudentSchema, type Student } from "../model/student";
-import { useSetDialogOpen } from "../store/useDialogStore";
+import { useSetDialogState } from "../store/useDialogStore";
 
 const SCHOOL_YEARS = Array.from({ length: 11 }, (_, i) => 2020 + i);
 const PUNISHMENT_YEARS = Array.from({ length: 10 }, (_, i) => i);
@@ -59,7 +59,7 @@ function SectionHeading({ icon, label, accent = "from-violet-500 to-purple-600" 
 
 const EditStudentDialogMain = ({ student }: { student: Student }) => {
     const { editStudent } = useStudents();
-    const setDialogOpen = useSetDialogOpen();
+    const setDialogOpen = useSetDialogState();
 
     const form = useForm<UpdateStudentInput>({
         resolver: zodResolver(updateStudentSchema),

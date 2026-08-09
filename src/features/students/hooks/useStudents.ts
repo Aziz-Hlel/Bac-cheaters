@@ -10,8 +10,10 @@ export function useStudents() {
   const studentQuery = useQuery({
     queryKey: ['students'],
     queryFn: repository.getAll,
+    enabled:true,
+    throwOnError:true,
   });
-
+ 
   const students: Student[] = useMemo(() => studentQuery.data || [], [studentQuery.data]);
 
   const nameFuse = useMemo(
@@ -34,12 +36,17 @@ export function useStudents() {
     [students],
   );
 
-  async function addStudent(student: CreateStudentInput) {
-    await repository.create(student);
+
+  async function addStudents(students: CreateStudentInput[]) {
+    await repository.createMany(students);
   }
 
   async function deleteStudent(id: string) {
     await repository.remove(id);
+  }
+  
+  async function deleteAllStudents() {
+    await repository.removeAll();
   }
 
   async function editStudent(id: string, data: Partial<Student>) {
@@ -53,7 +60,7 @@ export function useStudents() {
 
     const resultWithScore = queryResult.map((item) => ({
       ...item.item,
-      score: item.score,
+      score: item.score!,
     }));
 
     return resultWithScore;
@@ -62,12 +69,14 @@ export function useStudents() {
   return {
     students,
 
-    addStudent,
+    addStudents,
 
     deleteStudent,
 
     editStudent,
 
     searchStudents,
+
+    deleteAllStudents,
   };
 }

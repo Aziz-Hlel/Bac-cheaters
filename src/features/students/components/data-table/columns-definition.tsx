@@ -1,6 +1,8 @@
-import type { ColumnDef } from "@tanstack/react-table"
-import type { Student } from "../../model/student"
-import ActionsColumn from "./actions-column"
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { Student } from "../../model/student";
+import ActionsColumn from "./actions-column";
 
 
 
@@ -63,13 +65,7 @@ export const columns: ColumnDef<Student>[] = [
         enableHiding: true,
         cell: ({ row }) => <div>{row.getValue('originalInstitute') ?? '-'}</div>
     },
-    {
-        id: 'punishmentEndYear',
-        header: 'سنة انتهاء العقوبة',
-        accessorKey: 'punishmentEndYear',
-        enableHiding: true,
-        cell: ({ row }) => <div>{row.getValue('punishmentEndYear') ?? '-'}</div>
-    },
+
     {
         id: 'punishmentReason',
         header: 'سبب العقوبة',
@@ -83,6 +79,57 @@ export const columns: ColumnDef<Student>[] = [
         accessorKey: 'violation',
         enableHiding: true,
         cell: ({ row }) => <div>{row.getValue('violation') ?? '-'}</div>
+    },
+    {
+        id: "punishmentDuration",
+        header: "مدة العقوبة",
+        accessorKey: "punishmentDuration",
+        enableHiding: true,
+        cell: ({ row }) => {
+            const punishmentDuration = row.getValue('punishmentDuration') as number ?? null;
+            return <>
+                {punishmentDuration !== undefined && punishmentDuration !== null ? (
+                    <Badge className="font-mono">
+                        {punishmentDuration} سنة
+                    </Badge>
+                ) : (
+                    <span className="text-muted-foreground/50 text-xs">غير محدد</span>
+                )}
+            </>
+        }
+    },
+    {
+        id: 'punishmentEndYear',
+        header: 'سنة انتهاء العقوبة',
+        accessorKey: 'punishmentEndYear',
+        enableHiding: true,
+        cell: ({ row }) => {
+            const schoolYear = row.getValue('schoolYear') as number ?? null;
+            const punishmentDuration = row.getValue('punishmentDuration') as number ?? null;
+            const punishmentEndYear = schoolYear + punishmentDuration;
+
+            const aligeableDate = new Date(`${punishmentEndYear - 1}-07-01`)
+            const isPunishmentPassed = new Date().getTime() - aligeableDate.getTime() > 0
+
+            // if (isPunishmentPassed) {
+            //     return <div className="font-mono h-full w-full flex justify-center items-center absolute inset-0  text-red-500 bg-red-500/10">
+            //         دورة جوان  {punishmentEndYear}
+            //     </div>
+            // } else {
+            //     return <Badge variant="destructive" className="font-mono">
+            //         {punishmentEndYear} سنة
+            //     </Badge>
+            // }
+
+            return (
+                <div className={cn("font-mono h-full w-full flex justify-center items-center absolute  inset-0   ",
+                    isPunishmentPassed ? "text-green-500 bg-green-500/10" : "text-red-500 bg-red-500/10"
+                )}
+                >
+                    {isPunishmentPassed ? `دورة جوان ${punishmentEndYear}` : `دورة جوان ${punishmentEndYear}`}
+                </div>
+            )
+        }
     },
     {
         id: 'actions',

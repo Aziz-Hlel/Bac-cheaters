@@ -10,7 +10,7 @@ import type { Row } from '@tanstack/react-table';
 import { EllipsisVertical, SquarePen, Trash2 } from 'lucide-react';
 import React, { Fragment } from 'react';
 import type { Student } from '../../model/student';
-import { useSetDialogOpen, useSetStudent } from '../../store/useDialogStore';
+import { useSetDialogState, useSetStudent } from '../../store/useDialogStore';
 
 type RowAction = {
   key: 'edit' | 'delete';
@@ -22,7 +22,7 @@ type RowAction = {
 
 const ActionsColumn = ({ row }: { row: Row<Student> }) => {
   const setStudent = useSetStudent();
-  const setDialogOpen = useSetDialogOpen();
+  const setDialogOpen = useSetDialogState();
 
 
   const actions: RowAction[] = [

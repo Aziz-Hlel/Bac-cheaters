@@ -8,11 +8,11 @@ import queryClient from '@/config/react-qeury'
 import { useMutation } from '@tanstack/react-query'
 import { useStudents } from '../hooks/useStudents'
 import type { Student } from '../model/student'
-import { useSetDialogOpen } from '../store/useDialogStore'
+import { useSetDialogState } from '../store/useDialogStore'
 
 const DeleteStudentDialogMain = ({ student }: { student: Student }) => {
 
-    const setDialogOpen = useSetDialogOpen()
+    const setDialogOpen = useSetDialogState()
     const { deleteStudent } = useStudents();
 
     const { mutateAsync, isPending } = useMutation({
