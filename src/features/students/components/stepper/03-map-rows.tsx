@@ -1,10 +1,10 @@
-import { useForm, Controller } from "react-hook-form"
-import { firstAndLastRowSchema, type FirstAndLastRowInput } from "../../schemas/mapFirstAndLastRow"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowDownToLine, ArrowUpToLine, Info } from 'lucide-react';
+import { Controller, useForm } from "react-hook-form";
+import { firstAndLastRowSchema, type FirstAndLastRowInput } from "../../schemas/mapFirstAndLastRow";
 
 interface MapRowsProps {
     handleMapRowsStep: (columns: FirstAndLastRowInput) => void
@@ -14,8 +14,8 @@ const MapRows = ({ handleMapRowsStep }: MapRowsProps) => {
     const form = useForm<FirstAndLastRowInput>({
         resolver: zodResolver(firstAndLastRowSchema),
         defaultValues: {
-            firstRow: 8,
-            lastRow: 1220,
+            firstRow: null,
+            lastRow: null,
         }
     })
 

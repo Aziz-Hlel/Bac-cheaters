@@ -25,14 +25,14 @@ const MapColumns = ({ handleMapColumnsStep }: MapColumnsProps) => {
         resolver: zodResolver(keysToExcelColumnsSchema),
         defaultValues: {
             cin: null,
-            name: "E",
-            delegation: "K",
-            section: "I",
-            registrationNumber: "F",
-            registrationType: "J",
-            originalInstitute: "H",
-            punishmentReason: "D",
-            violation: "C",
+            name: null,
+            delegation: null,
+            section: null,
+            registrationNumber: null,
+            registrationType: null,
+            originalInstitute: null,
+            punishmentReason: null,
+            violation: null,
         }
     });
 
@@ -42,14 +42,14 @@ const MapColumns = ({ handleMapColumnsStep }: MapColumnsProps) => {
 
     const fields = [
         { key: "name", label: "الاسم واللقب", placeholder: "مثال: A", Icon: UserIcon },
-        { key: "cin", label: "رقم بطاقة التعريف", placeholder: "مثال: B", Icon: IdCardIcon },
-        { key: "delegation", label: "المندوبية", placeholder: "مثال: C", Icon: BuildingIcon },
-        { key: "section", label: "الشعبة", placeholder: "مثال: D", Icon: GraduationCapIcon },
-        { key: "registrationNumber", label: "رقم التسجيل", placeholder: "مثال: E", Icon: HashIcon },
-        { key: "registrationType", label: "نوع التسجيل", placeholder: "مثال: F", Icon: FileTextIcon },
-        { key: "originalInstitute", label: "المعهد الأصلي", placeholder: "مثال: G", Icon: SchoolIcon },
-        { key: "punishmentReason", label: "سبب العقوبة", placeholder: "مثال: H", Icon: AlertCircleIcon },
-        { key: "violation", label: "العقوبة", placeholder: "مثال: I", Icon: AlertTriangleIcon },
+        { key: "cin", label: "رقم بطاقة التعريف", placeholder: "", Icon: IdCardIcon },
+        { key: "delegation", label: "المندوبية", placeholder: "", Icon: BuildingIcon },
+        { key: "section", label: "الشعبة", placeholder: "", Icon: GraduationCapIcon },
+        { key: "registrationNumber", label: "رقم التسجيل", placeholder: "", Icon: HashIcon },
+        { key: "registrationType", label: "نوع التسجيل", placeholder: "", Icon: FileTextIcon },
+        { key: "originalInstitute", label: "المعهد الأصلي", placeholder: "", Icon: SchoolIcon },
+        { key: "punishmentReason", label: "سبب العقوبة", placeholder: "", Icon: AlertCircleIcon },
+        { key: "violation", label: "العقوبة", placeholder: "", Icon: AlertTriangleIcon },
     ] as const;
 
     return (

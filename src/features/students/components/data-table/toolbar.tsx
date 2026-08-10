@@ -98,8 +98,8 @@ const Toolbar = () => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
                         <DropdownMenuGroup>
-                            <DropdownMenuLabel>
-                                Visible Columns
+                            <DropdownMenuLabel className='font-bold '>
+                                إخفاء وإظهار الأعمدة
                             </DropdownMenuLabel>
 
                             <DropdownMenuSeparator />
@@ -122,7 +122,7 @@ const Toolbar = () => {
                                             : column.id}
                                     </DropdownMenuCheckboxItem>
                                 ))}
-                            <Button variant='secondary' className='w-full' onClick={resetColumnVisivility}>Reset</Button>
+                            <Button variant='secondary' className='w-full bg-blue-600 hover:bg-blue-600/80 text-white' onClick={resetColumnVisivility}>إعادة تعيين</Button>
                         </DropdownMenuGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>

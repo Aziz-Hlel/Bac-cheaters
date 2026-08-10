@@ -209,7 +209,7 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
                     </div>
 
                     <p className="font-medium text-sm">
-                        Drag & drop an Excel file
+                        اسحب و افلت ملف الاكسل هنا
                     </p>
 
                     <p className="text-muted-foreground text-xs">
@@ -219,14 +219,14 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
 
                 <FileUploadTrigger >
                     <Button variant="outline" size="sm" className="mt-2 w-fit">
-                        Browse file
+                        اختر الملف
                     </Button>
                 </FileUploadTrigger>
             </FileUploadDropzone>
 
             <FileUploadList>
                 {files.map((file) => (
-                    <FileUploadItem key={file.name} value={file}>
+                    <FileUploadItem className="text-right" dir="rtl" key={file.name} value={file}>
                         <FileUploadItemMetadata />
 
                         <FileUploadItemDelete >

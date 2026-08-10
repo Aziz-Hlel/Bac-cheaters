@@ -28,15 +28,15 @@ const DeleteStudentDialogMain = ({ student }: { student: Student }) => {
         try {
             await mutateAsync(student.id);
             toast.add({
-                title: "Student deleted",
+                title: "تم حذف الطالب",
                 type: "success",
             })
             setDialogOpen(null)
         } catch (error) {
             toast.add({
-                title: "Error deleting student",
+                title: "حدث خطأ أثناء حذف الطالب",
                 type: "error",
-                description: error instanceof Error ? error.message : "An unknown error occurred",
+                description: error instanceof Error ? error.message : "حدث خطأ غير معروف",
             })
         }
     }
@@ -47,15 +47,15 @@ const DeleteStudentDialogMain = ({ student }: { student: Student }) => {
         <AlertDialog open={true} onOpenChange={handleCancel}>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Exam Schedule</AlertDialogTitle>
-                    <AlertDialogDescription>Are you sure you want to delete this exam schedule?</AlertDialogDescription>
+                    <AlertDialogTitle>حذف طالب</AlertDialogTitle>
+                    <AlertDialogDescription>هل انت متاكد من حذف هذا الطالب؟</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel onClick={handleCancel} disabled={isPending}>
-                        Cancel
+                        الغاء
                     </AlertDialogCancel>
                     <Button onClick={handleDelete} disabled={isPending} className='bg-red-600 hover:bg-red-500'>
-                        Delete
+                        حذف
                     </Button>
                 </AlertDialogFooter>
             </AlertDialogContent>

@@ -28,8 +28,8 @@ const ActionsColumn = ({ row }: { row: Row<Student> }) => {
   const actions: RowAction[] = [
     {
       key: 'edit',
-      label: 'Edit',
-      icon: <SquarePen size={16} className='text-green-500' />,
+      label: 'تعديل',
+      icon: <SquarePen size={16} className='text-green-500 ' />,
       onClick: () => {
         setStudent(row.original);
         setDialogOpen('edit');
@@ -38,8 +38,8 @@ const ActionsColumn = ({ row }: { row: Row<Student> }) => {
 
     {
       key: 'delete',
-      label: 'Delete',
-      icon: <Trash2 size={16} className='text-red-500' />,
+      label: 'حذف',
+      icon: <Trash2 size={16} className='text-red-500 ' />,
       onClick: () => {
         setStudent(row.original);
         setDialogOpen('delete');
@@ -57,12 +57,14 @@ const ActionsColumn = ({ row }: { row: Row<Student> }) => {
               <EllipsisVertical className='size-4 rotate-90 cursor-pointer rounded-full hover:bg-gray-200' />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end' className='w-40'>
+          <DropdownMenuContent align='start' className='w-40'>
             {actions.map((action) => (
               <Fragment key={action.key}>
-                <DropdownMenuItem onClick={action.onClick}>
+                <DropdownMenuItem onClick={action.onClick} className="flex  ">
                   <span>{action.label}</span>
-                  <DropdownMenuShortcut>{action.icon}</DropdownMenuShortcut>
+                  <DropdownMenuShortcut className='flex flex-1 justify-end items-end'>
+                    {action.icon}
+                  </DropdownMenuShortcut>
                 </DropdownMenuItem>
               </Fragment>
             ))}

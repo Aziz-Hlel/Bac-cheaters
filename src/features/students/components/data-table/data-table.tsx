@@ -52,7 +52,7 @@ const DraggableColumnDataTableDemo = () => {
 
 
     return (
-        <div className='w-full'>
+        <div className='w-full flex flex-col gap-4 py-4'>
             <Toolbar />
             <div className='rounded-md border'>
                 <DndContext
@@ -63,7 +63,7 @@ const DraggableColumnDataTableDemo = () => {
                     sensors={sensors}
                 >
                     <Table>
-                        <TableHeader>
+                        <TableHeader className=''>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <TableRow key={headerGroup.id} className='bg-muted/50 [&>th]:border-t-0'>
                                     <SortableContext items={columnOrder} strategy={horizontalListSortingStrategy}>
@@ -143,7 +143,7 @@ const DraggableTableHeader = ({ header }: { header: Header<Student, unknown> }) 
                 <span className='grow truncate'>
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </span>
-                <Button
+                {header.column.getCanSort() && <Button
                     size='icon'
                     variant='ghost'
                     className='group -mr-1 size-7'
@@ -166,7 +166,7 @@ const DraggableTableHeader = ({ header }: { header: Header<Student, unknown> }) 
                     }[header.column.getIsSorted() as string] ?? (
                             <ChevronUpIcon className='shrink-0 opacity-0 group-hover:opacity-60' size={16} aria-hidden='true' />
                         )}
-                </Button>
+                </Button>}
             </div>
         </TableHead>
     )
@@ -187,7 +187,7 @@ const DragAlongCell = ({ cell }: { cell: Cell<Student, unknown> }) => {
     }
 
     return (
-        <TableCell ref={setNodeRef} className='truncate' style={style}>
+        <TableCell ref={setNodeRef} className='truncate ps-4' style={style}>
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>
     )

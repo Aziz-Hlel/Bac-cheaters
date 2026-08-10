@@ -87,7 +87,7 @@ export const columns: ColumnDef<Student>[] = [
         enableHiding: true,
         cell: ({ row }) => {
             const punishmentDuration = row.getValue('punishmentDuration') as number ?? null;
-            return <>
+            return <div className="w-fit mx-auto">
                 {punishmentDuration !== undefined && punishmentDuration !== null ? (
                     <Badge className="font-mono">
                         {punishmentDuration} سنة
@@ -95,7 +95,7 @@ export const columns: ColumnDef<Student>[] = [
                 ) : (
                     <span className="text-muted-foreground/50 text-xs">غير محدد</span>
                 )}
-            </>
+            </div>
         }
     },
     {
@@ -134,6 +134,7 @@ export const columns: ColumnDef<Student>[] = [
     {
         id: 'actions',
         header: 'الإجراءات',
-        cell: ({ row }) => <ActionsColumn row={row} />
+        cell: ({ row }) => <ActionsColumn row={row} />,
+        enableSorting: false
     },
 ]
