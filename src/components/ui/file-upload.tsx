@@ -1,5 +1,9 @@
 "use client";
 
+import { useDirection } from "@/components/ui/direction";
+import { useAsRef } from "@/hooks/use-as-ref";
+import { useLazyRef } from "@/hooks/use-lazy-ref";
+import { cn } from "@/lib/utils";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import {
@@ -12,10 +16,6 @@ import {
   FileVideoIcon,
 } from "lucide-react";
 import * as React from "react";
-import { cn } from "@/lib/utils";
-import { useAsRef } from "@/hooks/use-as-ref";
-import { useLazyRef } from "@/hooks/use-lazy-ref";
-import { useDirection } from "@/components/ui/direction";
 
 const ROOT_NAME = "FileUpload";
 const DROPZONE_NAME = "FileUploadDropzone";
@@ -689,7 +689,7 @@ function FileUpload(props: FileUploadProps) {
 
 interface FileUploadDropzoneProps
   extends React.ComponentProps<"div">,
-    useRender.ComponentProps<"div"> {}
+  useRender.ComponentProps<"div"> { }
 
 function FileUploadDropzone(props: FileUploadDropzoneProps) {
   const {
@@ -899,7 +899,7 @@ function FileUploadDropzone(props: FileUploadDropzoneProps) {
 
 interface FileUploadTriggerProps
   extends React.ComponentProps<"button">,
-    useRender.ComponentProps<"button"> {}
+  useRender.ComponentProps<"button"> { }
 
 function FileUploadTrigger(props: FileUploadTriggerProps) {
   const { render, onClick: onClickProp, ...triggerProps } = props;
@@ -942,7 +942,7 @@ function FileUploadTrigger(props: FileUploadTriggerProps) {
 
 interface FileUploadListProps
   extends React.ComponentProps<"div">,
-    useRender.ComponentProps<"div"> {
+  useRender.ComponentProps<"div"> {
   orientation?: "horizontal" | "vertical";
   forceMount?: boolean;
 }
@@ -1011,7 +1011,7 @@ function useFileUploadItemContext(consumerName: string) {
 
 interface FileUploadItemProps
   extends React.ComponentProps<"div">,
-    useRender.ComponentProps<"div"> {
+  useRender.ComponentProps<"div"> {
   value: File;
 }
 
@@ -1060,9 +1060,8 @@ function FileUploadItem(props: FileUploadItemProps) {
         id,
         "aria-setsize": fileCount,
         "aria-posinset": fileIndex,
-        "aria-describedby": `${nameId} ${sizeId} ${statusId} ${
-          fileState?.error ? messageId : ""
-        }`,
+        "aria-describedby": `${nameId} ${sizeId} ${statusId} ${fileState?.error ? messageId : ""
+          }`,
         "aria-labelledby": nameId,
         dir: context.dir,
         className: cn(
@@ -1097,7 +1096,7 @@ function FileUploadItem(props: FileUploadItemProps) {
 
 interface FileUploadItemPreviewProps
   extends React.ComponentProps<"div">,
-    useRender.ComponentProps<"div"> {
+  useRender.ComponentProps<"div"> {
   previewRender?: (
     file: File,
     fallback: () => React.ReactNode,
@@ -1172,7 +1171,7 @@ function FileUploadItemPreview(props: FileUploadItemPreviewProps) {
 
 interface FileUploadItemMetadataProps
   extends React.ComponentProps<"div">,
-    useRender.ComponentProps<"div"> {
+  useRender.ComponentProps<"div"> {
   size?: "default" | "sm";
 }
 
@@ -1241,7 +1240,7 @@ function FileUploadItemMetadata(props: FileUploadItemMetadataProps) {
 }
 interface FileUploadItemProgressProps
   extends React.ComponentProps<"div">,
-    useRender.ComponentProps<"div"> {
+  useRender.ComponentProps<"div"> {
   variant?: "linear" | "circular" | "fill";
   size?: number;
   forceMount?: boolean;
@@ -1373,7 +1372,7 @@ function FileUploadItemProgress(props: FileUploadItemProgressProps) {
 
 interface FileUploadItemDeleteProps
   extends React.ComponentProps<"button">,
-    useRender.ComponentProps<"button"> {}
+  useRender.ComponentProps<"button"> { }
 
 function FileUploadItemDelete(props: FileUploadItemDeleteProps) {
   const { render, onClick: onClickProp, ...deleteProps } = props;
@@ -1419,7 +1418,7 @@ function FileUploadItemDelete(props: FileUploadItemDeleteProps) {
 
 interface FileUploadClearProps
   extends React.ComponentProps<"button">,
-    useRender.ComponentProps<"button"> {
+  useRender.ComponentProps<"button"> {
   forceMount?: boolean;
 }
 
@@ -1483,8 +1482,6 @@ export {
   FileUploadItemMetadata,
   FileUploadItemPreview,
   FileUploadItemProgress,
-  FileUploadList,
-  type FileUploadProps,
-  FileUploadTrigger,
-  useStore as useFileUpload,
+  FileUploadList, FileUploadTrigger,
+  useStore as useFileUpload, type FileUploadProps
 };
