@@ -10,32 +10,21 @@ export function useStudents() {
   const studentQuery = useQuery({
     queryKey: ['students'],
     queryFn: repository.getAll,
-    enabled:true,
-    throwOnError:true,
+    enabled: true,
+    throwOnError: true,
   });
- 
-  const students: Student[] = useMemo(() => studentQuery.data || [], [studentQuery.data]);
 
-  const nameFuse = useMemo(
-    () =>
-      new Fuse(students, {
-        keys: ['name'],
-        threshold: 0.3,
-        includeScore: true,
-      }),
-    [students],
-  );
+  const students: Student[] = useMemo(() => studentQuery.data || [], [studentQuery.data]);
 
   const cinFuse = useMemo(
     () =>
       new Fuse(students, {
         keys: ['cin'],
-        threshold: 0.3,
+        threshold: 0.6,
         includeScore: true,
       }),
     [students],
   );
-
 
   async function addStudents(students: CreateStudentInput[]) {
     await repository.createMany(students);
@@ -44,7 +33,7 @@ export function useStudents() {
   async function deleteStudent(id: string) {
     await repository.remove(id);
   }
-  
+
   async function deleteAllStudents() {
     await repository.removeAll();
   }
@@ -54,13 +43,13 @@ export function useStudents() {
   }
 
   function searchStudents(query: string, searchKey: SearchKey): StudentWithScore[] {
-    const fuse = searchKey === 'name' ? nameFuse : cinFuse;
+    const fuse = searchKey === 'name' ? cinFuse : cinFuse;
 
     const queryResult = fuse.search(query);
 
     const resultWithScore = queryResult.map((item) => ({
       ...item.item,
-      score: item.score!,
+      score: 0,
     }));
 
     return resultWithScore;

@@ -25,14 +25,12 @@ const MapColumns = ({ handleMapColumnsStep }: MapColumnsProps) => {
         resolver: zodResolver(keysToExcelColumnsSchema),
         defaultValues: {
             cin: null,
-            name: null,
             delegation: null,
             section: null,
             registrationNumber: null,
             registrationType: null,
             originalInstitute: null,
             punishmentReason: null,
-            violation: null,
         }
     });
 

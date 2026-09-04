@@ -1,9 +1,9 @@
-import DataTableLayout from "./features/students/components/data-table-layout";
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useStudents } from '@/features/students/hooks/useStudents';
 import { useMemo } from 'react';
+import DataTableLayout from "./features/students/components/data-table-layout";
 
 function StatCard({ label, value, icon, accent }: { label: string; value: number | string; icon: string; accent?: string }) {
   return (
@@ -31,8 +31,8 @@ export default function App() {
       const punishmentDuration = s.punishmentDuration ?? null;
       if (schoolYear == null || punishmentDuration == null) continue;
       const punishmentEndYear = schoolYear + punishmentDuration;
-      const aligeableDate = new Date(`${punishmentEndYear - 1}-07-01`);
-      const isPunishmentPassed = new Date().getTime() - aligeableDate.getTime() > 0;
+      const aligeableDate = new Date(`${punishmentEndYear}-07-01`)
+      const isPunishmentPassed = new Date().getTime() - aligeableDate.getTime() > 0
       if (isPunishmentPassed) expired++;
       else active++;
     }
@@ -63,7 +63,7 @@ export default function App() {
                 </Badge>
               </div>
               <h1 className="text-2xl md:text-3xl font-bold tracking-tight leading-snug" dir="rtl">
-                سجل الطلاب المخالفين في امتحان البكالوريا
+                سجل المترشحين المخالفين في امتحان البكالوريا
               </h1>
               <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed" dir="rtl">
                 قاعدة بيانات محلية لإدارة ملفات الغش والمخالفات الامتحانية — بما فيها التحقيق، المندوبية، الشعبة، وسنة الاجتياز.

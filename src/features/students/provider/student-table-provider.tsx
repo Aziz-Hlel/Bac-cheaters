@@ -24,6 +24,7 @@ import { useStudents } from '../hooks/useStudents';
 import type { Student } from '../model/student';
 import type { SearchKey } from '../types/searchKey';
 
+import MiniSearch from 'minisearch';
 
 type StudentTableContextType = {
     table: Table<Student>
@@ -52,15 +53,6 @@ export function StudentsTableProvider({ children }: PropsWithChildren) {
     const [searchKey, setSearchKey] = useState<SearchKey>('name');
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
     const { students } = useStudents();
-    const nameFuse = useMemo(
-        () =>
-            new Fuse(students, {
-                keys: ['name'],
-                threshold: 0.3,
-                includeScore: true,
-            }),
-        [students],
-    );
 
     const cinFuse = useMemo(
         () =>
@@ -72,7 +64,78 @@ export function StudentsTableProvider({ children }: PropsWithChildren) {
         [students],
     );
 
+    const normalizeArabic = (text: string) =>
+        text
+            ? text
+                .toLowerCase()
+                .replace(/[أإآ]/g, 'ا')
+                .replace(/ة/g, 'ه')
+                .replace(/ى/g, 'ي')
+                .replace(/\bال/g, '')
+                .replace(/[\u064B-\u0652]/g, '')
+                .trim()
+            : '';
 
+    const nameFuse = useMemo(() => {
+        const miniSearch = new MiniSearch({
+            fields: ['name'],
+            storeFields: [
+                "id",
+                "cin",
+                "name",
+                "delegation",
+                "section",
+                "schoolYear",
+                "registrationNumber",
+                "registrationType",
+                "originalInstitute",
+                "punishmentReason",
+                "violation",
+                "punishmentDuration",
+                "createdAt",
+            ],
+            // 1. Normalizes indexed text so "آدم" and "ادم" are stored identically
+            processTerm: (term) => normalizeArabic(term),
+            searchOptions: {
+                prefix: true,
+                fuzzy: 0.6, // Lowered from 0.5 to prevent high fuzzy scores
+                combineWith: 'AND',
+                // 2. Heavy penalty on fuzzy/prefix matches relative to exact matches
+                weights: { fuzzy: 0.1, prefix: 0.3 },
+            },
+        });
+
+        miniSearch.addAll(students);
+
+        return {
+            search: (searchQuery: string) => {
+                const trimmed = searchQuery.trim();
+                if (!trimmed) return [];
+
+                const normQuery = normalizeArabic(trimmed);
+                const results = miniSearch.search(trimmed);
+
+                // 3. Guarantee exact normalized matches float to #1
+                return results
+                    .sort((a, b) => {
+                        const normA = normalizeArabic(a.name);
+                        const normB = normalizeArabic(b.name);
+
+                        const isExactA = normA === normQuery ? 1 : 0;
+                        const isExactB = normB === normQuery ? 1 : 0;
+
+                        // If one item is an exact 100% match, put it first
+                        if (isExactA !== isExactB) {
+                            return isExactB - isExactA;
+                        }
+
+                        // Fallback to MiniSearch score for rest
+                        return b.score - a.score;
+                    })
+                    .map((item) => ({ item })) as unknown as { item: Student }[];
+            },
+        };
+    }, [students]);
 
     const studentsData = useMemo(() => {
         if (globalFilter) {
@@ -80,7 +143,7 @@ export function StudentsTableProvider({ children }: PropsWithChildren) {
             return fuse.search(globalFilter).map((item) => item.item);
         }
         return students
-    }, [cinFuse, globalFilter, nameFuse, searchKey, students])
+    }, [cinFuse, globalFilter, searchKey, students, nameFuse])
 
     // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({

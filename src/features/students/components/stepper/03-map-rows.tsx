@@ -14,8 +14,8 @@ const MapRows = ({ handleMapRowsStep }: MapRowsProps) => {
     const form = useForm<FirstAndLastRowInput>({
         resolver: zodResolver(firstAndLastRowSchema),
         defaultValues: {
-            firstRow: null,
-            lastRow: null,
+            firstRow: undefined,
+            lastRow: undefined,
         }
     })
 

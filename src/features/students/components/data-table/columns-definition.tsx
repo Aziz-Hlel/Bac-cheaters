@@ -108,7 +108,7 @@ export const columns: ColumnDef<Student>[] = [
             const punishmentDuration = row.getValue('punishmentDuration') as number ?? null;
             const punishmentEndYear = schoolYear + punishmentDuration;
 
-            const aligeableDate = new Date(`${punishmentEndYear - 1}-07-01`)
+            const aligeableDate = new Date(`${punishmentEndYear}-07-01`)
             const isPunishmentPassed = new Date().getTime() - aligeableDate.getTime() > 0
 
             // if (isPunishmentPassed) {

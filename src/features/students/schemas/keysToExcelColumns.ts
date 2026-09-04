@@ -11,10 +11,10 @@ export const keysToExcelColumnsSchema = z
       .nullable(),
     name: z
       .string({ error: 'الاسم واللقب مطلوب' })
+      .nonempty({ message: 'الاسم واللقب مطلوب' })
       .max(1, { message: 'too many carachters' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' })
-      .transform((val) => (val !== '' ? val : null)),
+      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' }),
     delegation: z
       .string()
       .max(1, { message: 'too many carachters' })
@@ -59,10 +59,10 @@ export const keysToExcelColumnsSchema = z
       .nullable(),
     violation: z
       .string({ error: 'العقوبة مطلوبة' })
+      .nonempty({ message: 'العقوبة مطلوبة' })
       .max(1, { message: 'too many carachters' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' })
-      .transform((val) => (val !== '' ? val : null)),
+      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' }),
   })
   .refine((data) => {
     const occObject: Record<string, number> = {};
