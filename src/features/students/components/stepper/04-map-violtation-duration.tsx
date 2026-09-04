@@ -5,8 +5,9 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import * as XLSX from 'xlsx';
+import { z } from 'zod';
 import type { FirstAndLastRowInput } from "../../schemas/mapFirstAndLastRow";
 import { type MapPunishmentDurationInput, mapPunishmentDurationSchema } from "../../schemas/mapPunishmentDuration";
 
@@ -86,17 +87,24 @@ const MapVioltationDuration = ({ excelArrayBuffer, scheetNumber, firstAndLastRow
         return [violationWithDuration, emptyCells]
     }, [excelArrayBuffer, firstAndLastRow, scheetNumber, violationColumn]);
 
-    const form = useForm<MapPunishmentDurationInput>({
-        resolver: zodResolver(mapPunishmentDurationSchema),
-        defaultValues: uniqueViolationsWithDuration
+    const form = useForm<{ items: MapPunishmentDurationInput }>({
+        resolver: zodResolver(z.object({ items: mapPunishmentDurationSchema })),
+        defaultValues: {
+            items: uniqueViolationsWithDuration
+        }
     })
 
     useEffect(() => {
-        form.reset(uniqueViolationsWithDuration)
+        form.reset({ items: uniqueViolationsWithDuration })
     }, [uniqueViolationsWithDuration, form])
 
-    const onSubmit = (data: MapPunishmentDurationInput) => {
-        handleMapViolationsDurationStep(data)
+    const { fields } = useFieldArray({
+        control: form.control,
+        name: "items"
+    })
+
+    const onSubmit = (data: { items: MapPunishmentDurationInput }) => {
+        handleMapViolationsDurationStep(data.items)
     }
 
     return (
@@ -127,14 +135,14 @@ const MapVioltationDuration = ({ excelArrayBuffer, scheetNumber, firstAndLastRow
                 </div>
             )}
 
-            {uniqueViolationsWithDuration.length === 0 ? (
+            {fields.length === 0 ? (
                 <div className="bg-muted/40 border rounded-lg p-6 text-center text-sm text-muted-foreground">
                     لم يتم العثور على أي نصوص مخالفات في العمود المحدد.
                 </div>
             ) : (
                 <div className="space-y-4 max-h-[40vh] overflow-y-auto pl-1 pr-1">
-                    {uniqueViolationsWithDuration.map((item, index) => (
-                        <Card key={index} className="p-4 shadow-sm border bg-zinc-50">
+                    {fields.map((item, index) => (
+                        <Card key={item.id} className="p-4 shadow-sm border bg-zinc-50">
                             <CardContent className="p-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                 <div className="space-y-1 flex-1">
                                     <div className="flex items-center gap-2">
@@ -149,7 +157,7 @@ const MapVioltationDuration = ({ excelArrayBuffer, scheetNumber, firstAndLastRow
 
                                 <div className="w-full sm:w-48 shrink-0">
                                     <Controller
-                                        name={`${index}.value`}
+                                        name={`items.${index}.value`}
                                         control={form.control}
                                         render={({ field, fieldState }) => (
                                             <Field data-invalid={fieldState.invalid}>

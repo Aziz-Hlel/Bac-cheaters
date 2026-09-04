@@ -8,9 +8,9 @@ import {
     FileUploadList,
     FileUploadTrigger,
 } from "@/components/ui/file-upload";
+import { toast } from "@/components/ui/toast";
 import { Check, Loader2, Upload, X } from "lucide-react";
 import * as React from "react";
-import { toast } from "sonner";
 
 import { Separator } from '@/components/ui/separator';
 import * as XLSX from 'xlsx';
@@ -25,6 +25,7 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
     const [sheetNames, setSheetNames] = React.useState<string[]>([]);
     const [selectedSheetIndex, setSelectedSheetIndex] = React.useState<number | null>(null);
     const [isLoadingSheets, setIsLoadingSheets] = React.useState<boolean>(false);
+    const MAX_SIZE = 50 * 1024 * 1024;
 
     const onFileValidate = React.useCallback((file: File): string | null => {
         const allowedMimeTypes = [
@@ -41,22 +42,29 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
             return "Only Excel files (.xls, .xlsx) are allowed";
         }
 
-        const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+        // const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
-        if (file.size > MAX_SIZE) {
-            return "File size must be less than 10MB";
-        }
+        // if (file.size > MAX_SIZE) {
+        //     return "File size must be less than 10MB";
+        // }
 
         return null;
     }, []);
 
     const onFileReject = React.useCallback(
-        (file: File, message: string) => {
-            toast(message, {
-                description: `"${file.name}" has been rejected`,
-            });
+        (file: File,) => {
+            if (file.size > MAX_SIZE) {
+                toast.add({
+                    title: "حدث خطأ أثناء رفع الملف",
+                    description: " حجم الملف أكبر من الحجم المسموح ( mb 50 ) ",
+                })
+            } else {
+                toast.add({
+                    title: "حدث خطأ أثناء رفع الملف",
+                })
+            }
         },
-        [],
+        [MAX_SIZE],
     );
 
     const processFile = React.useCallback((file: File) => {
@@ -74,17 +82,23 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
                     setSelectedSheetIndex(0);
                     setFiles([file]);
                 } else {
-                    toast.error("الملف لا يحتوي على أوراق عمل (excel sheets)  ");
+                    toast.add({
+                        title: "الملف لا يحتوي على أوراق عمل (excel sheets)  ",
+                    })
                 }
             } catch (error) {
                 console.error(error);
-                toast.error("فشل في قراءة ملف Excel");
+                toast.add({
+                    title: "فشل في قراءة ملف Excel",
+                })
             } finally {
                 setIsLoadingSheets(false);
             }
         };
         reader.onerror = () => {
-            toast.error("فشل في قراءة الملف");
+            toast.add({
+                title: "فشل في قراءة الملف",
+            })
             setIsLoadingSheets(false);
         };
         reader.readAsArrayBuffer(file);
@@ -149,8 +163,8 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
                                 type="button"
                                 onClick={() => setSelectedSheetIndex(index)}
                                 className={`flex items-center justify-between p-3.5 rounded-lg border text-right transition-all duration-200 ${isSelected
-                                        ? "border-primary bg-primary/5 text-primary font-medium shadow-sm"
-                                        : "border-border hover:bg-muted/50 text-foreground"
+                                    ? "border-primary bg-primary/5 text-primary font-medium shadow-sm"
+                                    : "border-border hover:bg-muted/50 text-foreground"
                                     }`}
                             >
                                 <div className="flex items-center gap-3">
@@ -200,6 +214,7 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
             onFileReject={onFileReject}
             accept=".xls,.xlsx"
             maxFiles={1}
+            maxSize={MAX_SIZE}
             className="w-full max-w-md"
         >
             <FileUploadDropzone>
@@ -213,7 +228,7 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
                     </p>
 
                     <p className="text-muted-foreground text-xs">
-                        .xls or .xlsx (max 10MB)
+                        ملف .xls أو .xlsx ( 50mb بحد أقصى )
                     </p>
                 </div>
 

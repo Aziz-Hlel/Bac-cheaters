@@ -24,7 +24,7 @@ interface ConfirmExampleProps {
 }
 
 const COLUMN_LABELS: Record<keyof KeysToExcelColumnsInput, string> = {
-    cin: 'رقم B3 / CIN',
+    cin: 'رقم ب.ت.و',
     name: 'الاسم واللقب',
     delegation: 'المندوبية',
     section: 'الشعبة',
@@ -32,7 +32,7 @@ const COLUMN_LABELS: Record<keyof KeysToExcelColumnsInput, string> = {
     registrationType: 'نوع التسجيل',
     originalInstitute: 'المؤسسة الأصلية',
     punishmentReason: 'سبب العقوبة',
-    violation: 'نص المخالفة',
+    violation: 'العقوبة',
 };
 
 const ConfirmExamples = ({

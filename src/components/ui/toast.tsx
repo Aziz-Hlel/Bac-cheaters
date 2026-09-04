@@ -1,9 +1,9 @@
-import * as React from "react"
 import { Toast as ToastPrimitive } from "@base-ui/react/toast"
+import * as React from "react"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { XIcon, CircleCheckIcon, InfoIcon, TriangleAlertIcon, OctagonXIcon, Loader2Icon } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon, XIcon } from "lucide-react"
 
 const toast = ToastPrimitive.createToastManager()
 
@@ -20,7 +20,7 @@ function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
     <ToastPrimitive.Viewport
       data-slot="toast-viewport"
       className={cn(
-        "pointer-events-none fixed inset-x-4 bottom-4 z-50 mx-auto w-auto max-w-sm outline-none sm:right-4 sm:left-auto sm:mx-0 sm:w-full",
+        "pointer-events-none  fixed inset-x-4 bottom-4 z-100 mx-auto w-auto max-w-sm outline-none sm:right-4 sm:left-auto sm:mx-0 sm:w-full",
         className
       )}
       {...props}
@@ -216,17 +216,12 @@ const createToastManager = ToastPrimitive.createToastManager
 const useToastManager = ToastPrimitive.useToastManager
 
 export {
-  Toaster,
-  Toast,
-  ToastAction,
+  createToastManager, Toast, toast, ToastAction,
   ToastClose,
   ToastContent,
-  ToastDescription,
-  ToastPortal,
+  ToastDescription, Toaster, ToastPortal,
   ToastProvider,
   ToastTitle,
-  ToastViewport,
-  createToastManager,
-  toast,
-  useToastManager,
+  ToastViewport, useToastManager
 }
+

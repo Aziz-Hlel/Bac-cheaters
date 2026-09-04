@@ -24,6 +24,7 @@ const MapColumns = ({ handleMapColumnsStep }: MapColumnsProps) => {
     const form = useForm<KeysToExcelColumnsInput>({
         resolver: zodResolver(keysToExcelColumnsSchema),
         defaultValues: {
+            name: undefined,
             cin: null,
             delegation: null,
             section: null,
@@ -31,6 +32,7 @@ const MapColumns = ({ handleMapColumnsStep }: MapColumnsProps) => {
             registrationType: null,
             originalInstitute: null,
             punishmentReason: null,
+            violation: undefined,
         }
     });
 
@@ -39,15 +41,15 @@ const MapColumns = ({ handleMapColumnsStep }: MapColumnsProps) => {
     };
 
     const fields = [
-        { key: "name", label: "الاسم واللقب", placeholder: "مثال: A", Icon: UserIcon },
-        { key: "cin", label: "رقم بطاقة التعريف", placeholder: "", Icon: IdCardIcon },
-        { key: "delegation", label: "المندوبية", placeholder: "", Icon: BuildingIcon },
-        { key: "section", label: "الشعبة", placeholder: "", Icon: GraduationCapIcon },
-        { key: "registrationNumber", label: "رقم التسجيل", placeholder: "", Icon: HashIcon },
-        { key: "registrationType", label: "نوع التسجيل", placeholder: "", Icon: FileTextIcon },
-        { key: "originalInstitute", label: "المعهد الأصلي", placeholder: "", Icon: SchoolIcon },
-        { key: "punishmentReason", label: "سبب العقوبة", placeholder: "", Icon: AlertCircleIcon },
-        { key: "violation", label: "العقوبة", placeholder: "", Icon: AlertTriangleIcon },
+        { key: "name", label: "الاسم واللقب", description: "", placeholder: "مثال: A", Icon: UserIcon },
+        { key: "cin", label: "رقم بطاقة التعريف", description: "", placeholder: "", Icon: IdCardIcon },
+        { key: "delegation", label: "المندوبية", description: "", placeholder: "", Icon: BuildingIcon },
+        { key: "section", label: "الشعبة", description: "", placeholder: "", Icon: GraduationCapIcon },
+        { key: "registrationNumber", label: "رقم التسجيل", description: "", placeholder: "", Icon: HashIcon },
+        { key: "registrationType", label: "نوع التسجيل", description: "فردي / عمومي / خاص", placeholder: "", Icon: FileTextIcon },
+        { key: "originalInstitute", label: "المعهد الأصلي", description: "", placeholder: "", Icon: SchoolIcon },
+        { key: "punishmentReason", label: "المخالفة", description: "الغش / محاولة الغش", placeholder: "", Icon: AlertCircleIcon },
+        { key: "violation", label: "العقوبة / مدتها", description: "تحجير الترسيم في الامتحان لمدة 02 سنوات", placeholder: "", Icon: AlertTriangleIcon },
     ] as const;
 
     return (
@@ -68,9 +70,15 @@ const MapColumns = ({ handleMapColumnsStep }: MapColumnsProps) => {
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor={`${f.key}-input`} className="flex items-center gap-1.5">
-                                        <f.Icon className="size-3.5 text-muted-foreground" />
-                                        {f.label}
+                                    <FieldLabel htmlFor={`${f.key}-input`} className="flex flex-col items-start gap-1.5">
+                                        <div className='flex items-center gap-1.5'>
+                                            <f.Icon className="size-3.5 text-muted-foreground" />
+                                            {f.label}
+                                        </div>
+                                        <div className="text-xs text-muted-foreground h-4">
+                                            {f.description && " مثال : "}   {f.description}
+                                        </div>
+
                                     </FieldLabel>
                                     <Input
                                         {...field}
