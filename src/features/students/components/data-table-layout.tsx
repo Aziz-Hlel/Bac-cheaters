@@ -4,12 +4,12 @@
 
 import { DeleteAllStudentsDialog, DeleteStudentDialog, EditStudentDialog, UploadStudentsDialog } from '../dialogs'
 import { StudentsTableProvider } from '../provider/student-table-provider'
-import DraggableColumnDataTableDemo from './data-table/data-table'
+import StudentsDataTable from './data-table/data-table'
 
 const DataTableLayout = () => {
     return (
         <StudentsTableProvider>
-            <DraggableColumnDataTableDemo />
+            <StudentsDataTable />
             <EditStudentDialog />
             <DeleteStudentDialog />
             <UploadStudentsDialog />

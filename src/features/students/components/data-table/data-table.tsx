@@ -29,7 +29,7 @@ import TablePagination from './pagination'
 import Toolbar from './toolbar'
 
 
-const DraggableColumnDataTableDemo = () => {
+const StudentsDataTable = () => {
 
 
     const { table, columnOrder, setColumnOrder } = useStudentsTable()
@@ -193,4 +193,4 @@ const DragAlongCell = ({ cell }: { cell: Cell<Student, unknown> }) => {
     )
 }
 
-export default DraggableColumnDataTableDemo
+export default StudentsDataTable

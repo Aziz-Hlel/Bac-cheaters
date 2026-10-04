@@ -26,11 +26,13 @@ import {
     BuildingIcon,
     CalendarIcon,
     ClipboardListIcon,
+    FileTextIcon,
     HashIcon,
     IdCardIcon,
     UserIcon
 } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+import { Textarea } from "@/components/ui/textarea";
 import { useStudents } from "../hooks/useStudents";
 import type { UpdateStudentInput } from "../model/student";
 import { updateStudentSchema, type Student } from "../model/student";
@@ -76,6 +78,7 @@ const EditStudentDialogMain = ({ student }: { student: Student }) => {
             punishmentDuration: student.punishmentDuration,
             punishmentReason: student.punishmentReason,
             violation: student.violation,
+            notes: student.notes,
         },
     });
 
@@ -115,7 +118,7 @@ const EditStudentDialogMain = ({ student }: { student: Student }) => {
                     <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
                     <div className="pointer-events-none absolute -right-2 top-10 h-16 w-16 rounded-full bg-white/5" />
 
-                    <DialogHeader>
+                    <DialogHeader className="ms-4">
                         <DialogTitle className="flex items-center gap-2.5 text-white">
                             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm ring-1 ring-white/30">
                                 <UserIcon className="size-5" />
@@ -350,9 +353,37 @@ const EditStudentDialogMain = ({ student }: { student: Student }) => {
                                 />
                             </FieldGroup>
                         </div>
+
+                        <div className="space-y-4">
+                            <SectionHeading
+                                icon={<FileTextIcon className="size-3.5" />}
+                                label="ملاحظات"
+                                accent="from-amber-500 to-orange-600"
+                            />
+
+                            <FieldGroup className="grid grid-cols-1 gap-4">
+                                <Controller
+                                    name="notes"
+                                    control={form.control}
+                                    render={({ field, fieldState }) => (
+                                        <Field data-invalid={fieldState.invalid}>
+                                           
+                                            <Textarea
+                                                {...field}
+                                                id="notes-input"
+                                                placeholder="أضف ملاحظات..."
+                                                value={field.value ?? ""}
+                                                rows={3}
+                                            />
+                                            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                        </Field>
+                                    )}
+                                />
+                            </FieldGroup>
+                        </div>
                     </div>
 
-                    <DialogFooter>
+                    <DialogFooter className="m-0 flex flex-row items-center justify-end gap-3 border-t bg-muted/50 px-6 py-4">
                         <Button type="button" variant="outline" onClick={handleCancel}>
                             إلغاء
                         </Button>

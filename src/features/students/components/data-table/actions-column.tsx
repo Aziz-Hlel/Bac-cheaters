@@ -50,9 +50,9 @@ const ActionsColumn = ({ row }: { row: Row<Student> }) => {
 
   return (
     <>
-      <div className='justify-end ps-0'>
+      <div className='flex justify-center'>
         <DropdownMenu>
-          <DropdownMenuTrigger className='flex justify-center'>
+          <DropdownMenuTrigger>
             <Button variant='ghost' className='data-[state=open]:bg-muted flex h-fit p-0 has-[>svg]:px-0'>
               <EllipsisVertical className='size-4 rotate-90 cursor-pointer rounded-full hover:bg-gray-200' />
             </Button>

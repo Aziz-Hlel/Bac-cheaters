@@ -66,6 +66,8 @@ export const studentSchema = z.object({
 
   punishmentDuration: z.number().int().min(0).max(10).nullable(), // مدة العقوبة
 
+  notes: z.string().trim().max(255).transform((v) => (v !== '' ? v : undefined)).optional(), // ملاحظات
+
   createdAt: z.string().transform(() => new Date().toISOString()),
 });
 

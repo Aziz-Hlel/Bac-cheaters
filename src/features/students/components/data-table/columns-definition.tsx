@@ -132,6 +132,13 @@ export const columns: ColumnDef<Student>[] = [
         }
     },
     {
+        id: 'notes',
+        header: 'ملاحظات',
+        accessorKey: 'notes',
+        enableHiding: true,
+        cell: ({ row }) => <div className={cn(typeof row.getValue('notes') !== 'string' && "text-center")}>{row.getValue('notes') || '-'}</div>
+    },
+    {
         id: 'actions',
         header: 'الإجراءات',
         cell: ({ row }) => <ActionsColumn row={row} />,
