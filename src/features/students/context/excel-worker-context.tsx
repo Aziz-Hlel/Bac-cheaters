@@ -23,6 +23,8 @@ export const ExcelWorkerProvider: React.FC<{ children: React.ReactNode }> = ({ c
     // Directly wrap the exposed ExcelWorker instance with Comlink
     const remoteWorker = Comlink.wrap<ExcelWorker>(rawWorker);
     // Since Comlink proxies are functions, wrap in an updater callback to avoid React calling remoteWorker()
+    // ! eslint diabled here
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setWorker(() => remoteWorker);
 
     return () => {
