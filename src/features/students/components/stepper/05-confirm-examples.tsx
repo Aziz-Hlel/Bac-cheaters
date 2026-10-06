@@ -47,6 +47,8 @@ const ConfirmExamples = ({
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState<{
         activeKeys: (keyof KeysToExcelColumnsInput)[];
+        // !
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         previewRows: { first3: Record<string, any>[]; last3: Record<string, any>[] };
         isOverlap: boolean;
     }>({
