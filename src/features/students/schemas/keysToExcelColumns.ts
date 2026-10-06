@@ -4,65 +4,74 @@ export const keysToExcelColumnsSchema = z
   .object({
     cin: z
       .string()
-      .max(1, { message: 'too many carachters' })
+      .trim()
+      .max(1, { message: 'الحد الأقصى حرف واحد فقط' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' })
+      .regex(/^[A-Za-z]?$/, { message: 'يُسمح فقط بالأحرف  (A-Z)' })
       .transform((val) => (val !== '' ? val : null))
       .nullable(),
     name: z
       .string({ error: 'الاسم واللقب مطلوب' })
+      .trim()
       .nonempty({ message: 'الاسم واللقب مطلوب' })
-      .max(1, { message: 'too many carachters' })
+      .max(1, { message: 'الحد الأقصى حرف واحد فقط' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' }),
+      .regex(/^[A-Za-z]?$/, { message: 'يُسمح فقط بالأحرف  (A-Z)' }),
     delegation: z
       .string()
-      .max(1, { message: 'too many carachters' })
+      .trim()
+      .max(1, { message: 'الحد الأقصى حرف واحد فقط' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' })
+      .regex(/^[A-Za-z]?$/, { message: 'يُسمح فقط بالأحرف  (A-Z)' })
       .transform((val) => (val !== '' ? val : null))
       .nullable(),
     section: z
       .string()
-      .max(1, { message: 'too many carachters' })
+      .trim()
+      .max(1, { message: 'الحد الأقصى حرف واحد فقط' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' })
+      .regex(/^[A-Za-z]?$/, { message: 'يُسمح فقط بالأحرف  (A-Z)' })
       .transform((val) => (val !== '' ? val : null))
       .nullable(),
     registrationNumber: z
       .string()
-      .max(1, { message: 'too many carachters' })
+      .trim()
+      .max(1, { message: 'الحد الأقصى حرف واحد فقط' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' })
+      .regex(/^[A-Za-z]?$/, { message: 'يُسمح فقط بالأحرف  (A-Z)' })
       .transform((val) => (val !== '' ? val : null))
       .nullable(),
     registrationType: z
       .string()
-      .max(1, { message: 'too many carachters' })
+      .trim()
+      .max(1, { message: 'الحد الأقصى حرف واحد فقط' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' })
+      .regex(/^[A-Za-z]?$/, { message: 'يُسمح فقط بالأحرف  (A-Z)' })
       .transform((val) => (val !== '' ? val : null))
       .nullable(),
     originalInstitute: z
       .string()
-      .max(1, { message: 'too many carachters' })
+      .trim()
+      .max(1, { message: 'الحد الأقصى حرف واحد فقط' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' })
+      .regex(/^[A-Za-z]?$/, { message: 'يُسمح فقط بالأحرف  (A-Z)' })
       .transform((val) => (val !== '' ? val : null))
       .nullable(),
     punishmentReason: z
       .string()
-      .max(1, { message: 'too many carachters' })
+      .trim()
+      .max(1, { message: 'الحد الأقصى حرف واحد فقط' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' })
+      .regex(/^[A-Za-z]?$/, { message: 'يُسمح فقط بالأحرف  (A-Z)' })
       .transform((val) => (val !== '' ? val : null))
       .nullable(),
     violation: z
       .string({ error: 'العقوبة مطلوبة' })
+      .trim()
       .nonempty({ message: 'العقوبة مطلوبة' })
-      .max(1, { message: 'too many carachters' })
+      .max(1, { message: 'الحد الأقصى حرف واحد فقط' })
       .toUpperCase()
-      .regex(/^[A-Za-z]?$/, { message: 'Only letters are allowed' }),
+      .regex(/^[A-Za-z]?$/, { message: 'يُسمح فقط بالأحرف  (A-Z)' }),
   })
   .refine((data) => {
     const occObject: Record<string, number> = {};
