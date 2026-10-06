@@ -3,108 +3,98 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Spinner } from '@/components/ui/spinner';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import * as XLSX from 'xlsx';
 import { z } from 'zod';
 import type { FirstAndLastRowInput } from "../../schemas/mapFirstAndLastRow";
 import { type MapPunishmentDurationInput, mapPunishmentDurationSchema } from "../../schemas/mapPunishmentDuration";
-
-
+import { useExcelWorker } from '../../context/excel-worker-context';
 import { AlertCircle, Clock } from 'lucide-react';
 
 interface MapVioltationDurationProps {
-    excelArrayBuffer: ArrayBuffer;
     scheetNumber: number;
     firstAndLastRow: FirstAndLastRowInput;
     violationColumn: string;
     handleMapViolationsDurationStep: (violationsDuration: MapPunishmentDurationInput) => void;
 }
 
-const extractDurationFromViolationText = (text: string): number | null => {
-    const normalized = text
-        .trim()
-        .replace(/[٠-٩]/g, d =>
-            String("٠١٢٣٤٥٦٧٨٩".indexOf(d))
-        );
-
-    // find positive numbers
-    const match = normalized.match(/\d+/);
-
-    if (match) {
-        return Number(match[0]);
-    }
-
-    if (normalized.includes("سنة")) {
-        return 1;
-    }
-
-    if (
-        normalized.includes("سنتين") ||
-        normalized.includes("سنتان")
-    ) {
-        return 2;
-    }
-
-    return null;
-}
-
-const MapVioltationDuration = ({ excelArrayBuffer, scheetNumber, firstAndLastRow, violationColumn, handleMapViolationsDurationStep }: MapVioltationDurationProps) => {
-
-    const [uniqueViolationsWithDuration, emptyCells] = useMemo(() => {
-
-        const workbook = XLSX.read(excelArrayBuffer, { type: 'array' });
-
-        const sheet = workbook.Sheets[workbook.SheetNames[scheetNumber]];
-
-        const values = new Set<string>();
-        const emptyCells: string[] = [];
-
-        for (let row = firstAndLastRow.firstRow; row <= firstAndLastRow.lastRow; row++) {
-            const cellAddress = `${violationColumn}${row}`;
-
-            const cellValue = sheet[cellAddress]?.v;
-
-            const isEmpty =
-                cellValue === undefined ||
-                cellValue === null ||
-                (typeof cellValue === 'string' && cellValue.trim() === '');
-
-            if (isEmpty) {
-                emptyCells.push(cellAddress);
-                continue;
-            }
-
-            values.add(String(cellValue).trim());
-        }
-
-        const violationWithDuration: { text: string, value: number | null }[] = []
-        values.forEach((violation) => {
-            violationWithDuration.push({ text: violation, value: extractDurationFromViolationText(violation) })
-        })
-
-        return [violationWithDuration, emptyCells]
-    }, [excelArrayBuffer, firstAndLastRow, scheetNumber, violationColumn]);
+const MapVioltationDuration = ({ scheetNumber, firstAndLastRow, violationColumn, handleMapViolationsDurationStep }: MapVioltationDurationProps) => {
+    const { worker } = useExcelWorker();
+    const [isLoading, setIsLoading] = useState(true);
+    const [emptyCells, setEmptyCells] = useState<string[]>([]);
 
     const form = useForm<{ items: MapPunishmentDurationInput }>({
         resolver: zodResolver(z.object({ items: mapPunishmentDurationSchema })),
         defaultValues: {
-            items: uniqueViolationsWithDuration
+            items: []
         }
-    })
+    });
 
     useEffect(() => {
-        form.reset({ items: uniqueViolationsWithDuration })
-    }, [uniqueViolationsWithDuration, form])
+        let isCancelled = false;
+
+        const fetchViolations = async () => {
+            if (!worker) return;
+            setIsLoading(true);
+            try {
+                const result = await worker.getUniqueViolations(
+                    scheetNumber,
+                    violationColumn,
+                    firstAndLastRow.firstRow,
+                    firstAndLastRow.lastRow
+                );
+
+                if (!isCancelled) {
+                    setEmptyCells(result.emptyCells);
+                    form.reset({ items: result.uniqueViolationsWithDuration });
+                    setIsLoading(false);
+                }
+            } catch (err) {
+                if (!isCancelled) {
+                    console.error('Error fetching unique violations from worker:', err);
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        fetchViolations();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [worker, scheetNumber, violationColumn, firstAndLastRow, form]);
 
     const { fields } = useFieldArray({
         control: form.control,
         name: "items"
-    })
+    });
 
     const onSubmit = (data: { items: MapPunishmentDurationInput }) => {
-        handleMapViolationsDurationStep(data.items)
+        handleMapViolationsDurationStep(data.items);
+    };
+
+    if (isLoading) {
+        return (
+            <div className="w-full max-w-2xl space-y-6" dir="rtl">
+                <div className="text-right space-y-1.5">
+                    <div className="flex items-center gap-2">
+                        <Spinner className="size-4 text-primary" />
+                        <h3 className="text-lg font-semibold text-foreground">جاري استخراج المخالفات من الملف...</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                        نقوم بتحليل عمود المخالفات في الخلفية عبر معالج منفصل لتفادي تجميد الواجهة.
+                    </p>
+                </div>
+                <div className="space-y-4">
+                    <Skeleton className="h-24 w-full rounded-xl" />
+                    <Skeleton className="h-24 w-full rounded-xl" />
+                    <Skeleton className="h-24 w-full rounded-xl" />
+                </div>
+            </div>
+        );
     }
 
     return (

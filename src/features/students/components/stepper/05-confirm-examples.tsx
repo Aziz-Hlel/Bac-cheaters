@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
-import * as XLSX from 'xlsx';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Spinner } from '@/components/ui/spinner';
 import {
     Table,
     TableBody,
@@ -13,9 +14,9 @@ import {
 import { CheckCircle2, Info } from 'lucide-react';
 import type { KeysToExcelColumnsInput } from '../../schemas/keysToExcelColumns';
 import type { FirstAndLastRowInput } from '../../schemas/mapFirstAndLastRow';
+import { useExcelWorker } from '../../context/excel-worker-context';
 
 interface ConfirmExampleProps {
-    excelArrayBuffer: ArrayBuffer;
     scheetNumber: number;
     firstAndLastRow: FirstAndLastRowInput;
     columns: KeysToExcelColumnsInput;
@@ -36,59 +37,80 @@ const COLUMN_LABELS: Record<keyof KeysToExcelColumnsInput, string> = {
 };
 
 const ConfirmExamples = ({
-    excelArrayBuffer,
     scheetNumber,
     firstAndLastRow,
     columns,
     violationsDuration,
     handleConfirmExamplesStep,
 }: ConfirmExampleProps) => {
-    const { activeKeys, previewRows, isOverlap } = useMemo(() => {
-        const workbook = XLSX.read(excelArrayBuffer, { type: 'array' });
-        const sheet = workbook.Sheets[workbook.SheetNames[scheetNumber]];
+    const { worker } = useExcelWorker();
+    const [isLoading, setIsLoading] = useState(true);
+    const [data, setData] = useState<{
+        activeKeys: (keyof KeysToExcelColumnsInput)[];
+        previewRows: { first3: Record<string, any>[]; last3: Record<string, any>[] };
+        isOverlap: boolean;
+    }>({
+        activeKeys: [],
+        previewRows: { first3: [], last3: [] },
+        isOverlap: false,
+    });
 
-        const keys = (Object.keys(columns) as (keyof KeysToExcelColumnsInput)[]).filter(
-            (key) => Boolean(columns[key])
-        );
+    useEffect(() => {
+        let isCancelled = false;
 
-        const totalRows = firstAndLastRow.lastRow - firstAndLastRow.firstRow + 1;
-        const first3RowIndexes: number[] = [];
-        for (let i = 0; i < Math.min(3, totalRows); i++) {
-            first3RowIndexes.push(firstAndLastRow.firstRow + i);
-        }
+        const fetchPreview = async () => {
+            if (!worker) return;
+            setIsLoading(true);
+            try {
+                const result = await worker.getPreviewRows(
+                    scheetNumber,
+                    columns,
+                    firstAndLastRow.firstRow,
+                    firstAndLastRow.lastRow
+                );
 
-        const last3RowIndexes: number[] = [];
-        for (let i = Math.max(0, totalRows - 3); i < totalRows; i++) {
-            const rowNum = firstAndLastRow.firstRow + i;
-            if (!first3RowIndexes.includes(rowNum)) {
-                last3RowIndexes.push(rowNum);
-            }
-        }
-
-        const getRowData = (rowNum: number) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const rowObj: Record<string, any> = { rowNum };
-            keys.forEach((key) => {
-                const colLetter = columns[key];
-                if (colLetter) {
-                    const cellAddress = `${colLetter}${rowNum}`;
-                    const val = sheet[cellAddress]?.v;
-                    rowObj[key] = val !== undefined && val !== null ? String(val).trim() : '';
+                if (!isCancelled) {
+                    setData(result);
+                    setIsLoading(false);
                 }
-            });
-            return rowObj;
+            } catch (err) {
+                if (!isCancelled) {
+                    console.error('Error fetching preview rows from worker:', err);
+                    setIsLoading(false);
+                }
+            }
         };
 
-        const first3 = first3RowIndexes.map(getRowData);
-        const last3 = last3RowIndexes.map(getRowData);
-        const overlap = first3RowIndexes.length + last3RowIndexes.length >= totalRows;
+        fetchPreview();
 
-        return {
-            activeKeys: keys,
-            previewRows: { first3, last3 },
-            isOverlap: overlap,
+        return () => {
+            isCancelled = true;
         };
-    }, [excelArrayBuffer, scheetNumber, firstAndLastRow, columns]);
+    }, [worker, scheetNumber, firstAndLastRow, columns]);
+
+    const { activeKeys, previewRows, isOverlap } = data;
+
+    if (isLoading) {
+        return (
+            <div className="w-full max-w-5xl space-y-6" dir="rtl">
+                <div className="text-right space-y-1.5">
+                    <div className="flex items-center gap-2">
+                        <Spinner className="size-4 text-primary" />
+                        <h3 className="text-lg font-semibold text-foreground">جاري تجهيز معاينة البيانات...</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                        نقوم بقراءة العينات المحددة عبر المعالج في الخلفية دون أي تجميد للواجهة.
+                    </p>
+                </div>
+                <div className="border rounded-lg p-6 space-y-4 bg-card shadow-sm">
+                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-12 w-full" />
+                    <Skeleton className="h-12 w-full" />
+                    <Skeleton className="h-12 w-full" />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="w-full max-w-5xl space-y-6" dir="rtl">
