@@ -92,6 +92,7 @@ export function StudentsTableProvider({ children }: PropsWithChildren) {
                 "punishmentReason",
                 "violation",
                 "punishmentDuration",
+                "notes",
                 "createdAt",
             ],
             // 1. Normalizes indexed text so "آدم" and "ادم" are stored identically

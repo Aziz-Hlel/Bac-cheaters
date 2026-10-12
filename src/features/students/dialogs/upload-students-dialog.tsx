@@ -86,7 +86,7 @@ const UploadStudentsDialogMain = () => {
 
   const [currentStep, setCurrentStep] = useState(1)
   return (
-    <Dialog open onOpenChange={handleCancel}>
+    <Dialog open onOpenChange={handleCancel} >
       <ExcelWorkerProvider>
         <DialogContent className='min-w-4xl max-h-[calc(100dvh-6rem)] min-h-8/12 flex flex-col'>
 
