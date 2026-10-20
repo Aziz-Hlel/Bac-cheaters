@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { ChevronDownIcon, SearchIcon, Sheet, Trash2 } from 'lucide-react'
+import { ChevronDownIcon, SearchIcon, Sheet, Trash2, UserPlus } from 'lucide-react'
 import { useId } from 'react'
 import { useStudentsTable } from '../../provider/student-table-provider'
 import { useSetDialogState } from '../../store/useDialogStore'
@@ -74,17 +74,24 @@ const Toolbar = () => {
             <div className='flex items-center gap-2'>
 
                 <Button
-                    onClick={() => setDialogState('delete-all')}
-                    className=" flex bg-red-600 hover:bg-red-600/80 "
-                >
-                    <Trash2 /> <span className="  "> حذف جميع التلامذة </span>
-                </Button>
-
-                <Button
                     onClick={() => setDialogState('upload')}
                     className=" flex bg-green-600 hover:bg-green-600/80 "
                 >
                     <Sheet /> <span className="  "> تحميل التلامذة </span>
+                </Button>
+
+                <Button
+                    onClick={() => setDialogState('add')}
+                    className=" flex bg-emerald-600 hover:bg-emerald-600/80 text-white "
+                >
+                    <UserPlus className="size-4" /> <span className="  ">  إضافة تلميذ واحد  </span>
+                </Button>
+
+                <Button
+                    onClick={() => setDialogState('delete-all')}
+                    className=" flex bg-red-600 hover:bg-red-600/80 "
+                >
+                    <Trash2 /> <span className="  "> حذف جميع التلامذة </span>
                 </Button>
 
                 <DropdownMenu>

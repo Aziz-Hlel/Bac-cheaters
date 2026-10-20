@@ -66,7 +66,12 @@ export const studentSchema = z.object({
 
   punishmentDuration: z.number().int().min(0).max(10).nullable(), // مدة العقوبة
 
-  notes: z.string().trim().max(255).transform((v) => (v !== '' ? v : undefined)).optional(), // ملاحظات
+  notes: z
+    .string()
+    .trim()
+    .max(255)
+    .transform((v) => (v !== '' ? v : undefined))
+    .optional(), // ملاحظات
 
   createdAt: z.string().transform(() => new Date().toISOString()),
 });
@@ -75,8 +80,8 @@ export type Student = z.infer<typeof studentSchema>;
 
 export type StudentWithScore = Student & { score: number };
 
-export const createStduentSchema = studentSchema.omit({ createdAt: true });
-export type CreateStudentInput = z.infer<typeof createStduentSchema>;
+export const createStudentSchema = studentSchema.omit({ createdAt: true });
+export type CreateStudentInput = z.infer<typeof createStudentSchema>;
 
 export const updateStudentSchema = studentSchema.omit({ createdAt: true });
 export type UpdateStudentInput = z.infer<typeof updateStudentSchema>;

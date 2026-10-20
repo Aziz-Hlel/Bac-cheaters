@@ -1,8 +1,15 @@
 import { useGetDialogOpen, useGetStudent } from "../store/useDialogStore"
+import CreateStudentDialogMain from "./create-student-dialog"
 import DeleteAllStudentsDialogMain from "./delete-all-students"
 import DeleteStudentDialogMain from "./delete-student-dialog"
 import EditStudentDialogMain from "./edit-student-dialog"
 import UploadStudentsDialogMain from "./upload-students-dialog"
+
+export const CreateStudentDialog = () => {
+    const dialog = useGetDialogOpen()
+    if (dialog === 'add') return <CreateStudentDialogMain />
+    return null
+}
 
 
 export const EditStudentDialog = () => {

@@ -1,4 +1,4 @@
-import type { Student } from '@/features/students/model/student';
+import type { CreateStudentInput, Student } from '@/features/students/model/student';
 import { readJson, writeJson } from '@/storage/json-storage';
 
 async function getStudents() {
@@ -17,13 +17,12 @@ export async function getById(id: string) {
   return students.find((student) => student.id === id);
 }
 
-export async function create(input: Omit<Student, 'createdAt'>) {
+export async function create(input: CreateStudentInput) {
   const students = await getStudents();
 
   const student: Student = {
-    createdAt: new Date().toISOString(),
-
     ...input,
+    createdAt: new Date().toISOString(),
   };
 
   students.push(student);
@@ -33,7 +32,7 @@ export async function create(input: Omit<Student, 'createdAt'>) {
   return student;
 }
 
-export async function createMany(input: Omit<Student, 'createdAt'>[]) {
+export async function createMany(input: CreateStudentInput[]) {
   const students = await getStudents();
 
   const newStudents: Student[] = input.map((student) => ({
@@ -42,9 +41,7 @@ export async function createMany(input: Omit<Student, 'createdAt'>[]) {
   }));
 
   const updatedStudents = [...newStudents, ...students];
-  console.log('ousil l write json');
   await writeJson(updatedStudents);
-  console.log('kaml mn write json');
 
   return updatedStudents;
 }
@@ -76,7 +73,6 @@ export async function remove(id: string) {
 
   await writeJson(filtered);
 }
-
 
 export async function removeAll() {
   await writeJson([]);

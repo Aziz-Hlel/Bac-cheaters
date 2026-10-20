@@ -25,6 +25,7 @@ import type { Student } from '../model/student';
 import type { SearchKey } from '../types/searchKey';
 
 import MiniSearch from 'minisearch';
+import { normalizeArabic } from '../utils/normalizeArabic';
 
 type StudentTableContextType = {
     table: Table<Student>
@@ -63,18 +64,6 @@ export function StudentsTableProvider({ children }: PropsWithChildren) {
             }),
         [students],
     );
-
-    const normalizeArabic = (text: string) =>
-        text
-            ? text
-                .toLowerCase()
-                .replace(/[أإآ]/g, 'ا')
-                .replace(/ة/g, 'ه')
-                .replace(/ى/g, 'ي')
-                .replace(/\bال/g, '')
-                .replace(/[\u064B-\u0652]/g, '')
-                .trim()
-            : '';
 
     const nameFuse = useMemo(() => {
         const miniSearch = new MiniSearch({
@@ -152,7 +141,7 @@ export function StudentsTableProvider({ children }: PropsWithChildren) {
         columns,
 
         state: {
-            sorting,
+            sorting: globalFilter !== '' ? undefined : sorting,
             columnOrder,
             columnVisibility,
             globalFilter,
