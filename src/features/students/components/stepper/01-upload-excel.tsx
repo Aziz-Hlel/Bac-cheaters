@@ -17,7 +17,7 @@ import * as Comlink from 'comlink';
 import { useExcelWorker } from '../../context/excel-worker-context';
 
 interface UploadExcelProps {
-  handleUploadStep: (file: File, sheetNumber: number) => void;
+  handleUploadStep: (sheetNumber: number) => void;
 }
 
 export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
@@ -81,10 +81,11 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
         // The Web Worker will parse and cache the workbook in its own background memory for all steps.
         // ----------------------------------------------------------------------------------------
         const names = await worker.loadWorkbook(Comlink.transfer(buffer, [buffer]));
+        console.log('wa7da')
 
         setSheetNames(names);
         if (names.length === 1) {
-          handleUploadStep(file, 0);
+          handleUploadStep(0);
         } else if (names.length > 1) {
           setSelectedSheetIndex(0);
           setFiles([file]);
@@ -109,7 +110,7 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
   const handleValueChange = React.useCallback(
     async (newFiles: File[]) => {
       const file = newFiles[0] ?? null;
-
+      console.log('handleValueChange')
       if (file) {
         processFile(file);
       } else {
@@ -124,7 +125,7 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
 
   const handleConfirm = () => {
     if (files[0] && selectedSheetIndex !== null) {
-      handleUploadStep(files[0], selectedSheetIndex);
+      handleUploadStep(selectedSheetIndex);
     }
   };
 
@@ -163,17 +164,15 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
                 key={name}
                 type='button'
                 onClick={() => setSelectedSheetIndex(index)}
-                className={`flex items-center justify-between rounded-lg border p-3.5 text-right transition-all duration-200 ${
-                  isSelected
-                    ? 'border-primary bg-primary/5 text-primary font-medium shadow-sm'
-                    : 'border-border hover:bg-muted/50 text-foreground'
-                }`}
+                className={`flex items-center justify-between rounded-lg border p-3.5 text-right transition-all duration-200 ${isSelected
+                  ? 'border-primary bg-primary/5 text-primary font-medium shadow-sm'
+                  : 'border-border hover:bg-muted/50 text-foreground'
+                  }`}
               >
                 <div className='flex items-center gap-3'>
                   <span
-                    className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${
-                      isSelected ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-                    }`}
+                    className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${isSelected ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                      }`}
                   >
                     {index + 1}
                   </span>
@@ -202,7 +201,7 @@ export function UploadExcel({ handleUploadStep }: UploadExcelProps) {
   return (
     <FileUpload
       value={files}
-      onValueChange={handleValueChange}
+      onAccept={handleValueChange}
       onFileValidate={onFileValidate}
       onFileReject={onFileReject}
       accept='.xls,.xlsx'

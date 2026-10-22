@@ -26,7 +26,7 @@ const TutorialVideo = ({ onSkip }: TutorialVideoProps) => {
                 </p>
             </div>
 
-            <div className="flex-1 min-h-0 flex items-center justify-center w-full">
+            <div className=" h-full flex items-center justify-center w-full">
                 <video
                     ref={videoRef}
                     src="/video_tutorial.mp4"

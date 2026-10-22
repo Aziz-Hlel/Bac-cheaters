@@ -13,8 +13,8 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { CheckIcon, LoaderCircleIcon } from "lucide-react"
 import { useState } from "react"
-import TutorialVideo from "../components/stepper/00-tutorial-video"
 import PickSchoolYear from "../components/stepper/00-school-year"
+import TutorialVideo from "../components/stepper/00-tutorial-video"
 import { UploadExcel } from "../components/stepper/01-upload-excel"
 import MapColumns from "../components/stepper/02-map-columns"
 import MapRows from "../components/stepper/03-map-rows"
@@ -48,7 +48,6 @@ const UploadStudentsDialogMain = () => {
   }
 
   const [schoolYear, setSchoolYear] = useState<number>(2020)
-  const [, setExcelFile] = useState<File | null>(null)
   const [sheetNumber, setSheetNumber] = useState<number>(0);
   const [violationsDuration, setViolationsDuration] = useState<Record<string, number | null> | null>(null)
 
@@ -68,8 +67,7 @@ const UploadStudentsDialogMain = () => {
     nextStep()
   }
 
-  const handleUploadStep = (file: File, sheetNumber: number) => {
-    setExcelFile(file);
+  const handleUploadStep = (sheetNumber: number) => {
     setSheetNumber(sheetNumber);
     nextStep();
   }
@@ -90,6 +88,7 @@ const UploadStudentsDialogMain = () => {
       return acc;
     }, {} as Record<string, number | null>)
     setViolationsDuration(formattedDuration);
+    console.log("1")
     nextStep();
   }
 
@@ -158,7 +157,7 @@ const UploadStudentsDialogMain = () => {
           <div className="flex  items-center justify-center px-8">
             <Stepper
               className="flex flex-col items-center justify-center gap-10"
-              value={currentStepIndex}
+              value={currentStepIndex + 1}
               orientation="horizontal"
               indicators={{
                 completed: (
@@ -198,7 +197,52 @@ const UploadStudentsDialogMain = () => {
 
           <Separator orientation="horizontal" className="h-0.5 " />
 
-          <div className=" flex-1 flex items-center justify-center">
+          <div className=" flex-1 min-h-0 flex items-center justify-center overflow-hidden overflow-y-auto ">
+            {/*
+            {activeStep.id === 'tutorial-video' && <TutorialVideo onSkip={handleTutorialStep}/>}
+
+            {activeStep.id === 'school-year' &&
+              <PickSchoolYear handlePickSchoolYearStep={handlePickSchoolYearStep} />}
+
+            {activeStep.id === 'upload-excel' &&
+              <UploadExcel handleUploadStep={handleUploadStep} />}
+
+            {activeStep.id === 'map-columns' &&
+              <MapColumns handleMapColumnsStep={handleMapColumnsStep} />}
+
+            {activeStep.id === 'map-rows' &&
+              <MapRows handleMapRowsStep={handleMapRowsStep} />}
+
+            {activeStep.id === 'map-duration' &&
+              (
+                <MapVioltationDuration
+                  firstAndLastRow={rows!}
+                  violationColumn={columns!.violation!}
+                  scheetNumber={sheetNumber}
+                  handleMapViolationsDurationStep={handleMapViolationsDurationStep}
+                />
+              )}
+            {activeStep.id === 'confirm-examples' &&
+              (
+                <ConfirmExamples
+                  scheetNumber={sheetNumber}
+                  firstAndLastRow={rows!}
+                  columns={columns!}
+                  violationsDuration={violationsDuration!}
+                  handleConfirmExamplesStep={handleConfirmExamplesStep}
+                />
+              )}
+            {activeStep.id === 'extract-students' && (
+              <ExtractStudents
+                schoolYear={schoolYear}
+                firstAndLastRow={rows!}
+                columns={columns!}
+                violationsDuration={violationsDuration!}
+                sheetNumber={sheetNumber}
+                handleAddStudentsStep={handleAddStudentsStep}
+              />
+            )} */}
+
             {renderCurrentStep()}
           </div>
         </DialogContent>
